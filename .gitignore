@@ -1,5 +1,7 @@
-#*.csv
+*.csv
 *.txt
 *.pth
 *.json
 *.xml
+.Ds_Store
+.idea
