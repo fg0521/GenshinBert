@@ -44,16 +44,34 @@ def clear_notice():
         f.close()
     # print(df['len'].value_counts())
 
+
+
+
 def clear_info():
-    max_len = 0
+    res = []
     with open('../data/mhy-info.txt','r') as f:
         for line in f.readlines():
-            line = line.replace('\n','')
-            if len(line)>=256:
-                print(line)
-            # print(len(line))
-            max_len = max(max_len,len(line))
-    print(max_len)
+
+            while '」「' in line:
+                idx = line.find('」「')
+                if re.findall('[\u4e00-\u9fa5\da-zA-Z]+',line[idx-1]) and re.findall('[\u4e00-\u9fa5\da-zA-Z]+',line[idx+2]):
+                    line = line.replace('」「','，')
+                else:
+                    line = line.replace('」「','')
+            line = re.sub('」|「|『|』','',line)
+            print(line)
+            if len(line)>15:
+                res.append(line)
+    with open('../data/mhy-info-clear.txt','w') as f1:
+        [f1.write(i) for i in res]
+
+
+
+
+
 if __name__ == '__main__':
-    # clear_notice()
-    clear_info()
+    res = []
+    with open('../data/mhy-notice.txt') as f:
+        for i in f.readlines():
+            res.extend(re.findall('[^\u4e00-\u9fa5\da-zA-Z!@#$%^&*()_+?><":：？》《【】\[\]（）！、;；]+',i.replace('\n','')))
+    print(set(res))

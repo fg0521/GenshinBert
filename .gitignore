@@ -4,3 +4,7 @@
 *.xml
 .Ds_Store
 .idea
+.bin
+.txt
+hflroberta
+genshin-bert
