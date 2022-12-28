@@ -110,4 +110,11 @@ def clear_xlsx():
 
 
 if __name__ == '__main__':
-    clear_xlsx()
+    # clear_xlsx()
+    with open('../data/mhy-paimeng-clear.txt', 'r') as f:
+        res = f.read().split('\n')
+    res = set(res)
+
+    with open('../data/mhy-paimeng-clear1.txt', 'w') as f1:
+        for i in list(res):
+            f1.write(i+'\n')
