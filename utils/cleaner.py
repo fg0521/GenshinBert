@@ -1,5 +1,7 @@
 import re
 import pandas as pd
+from openpyxl import Workbook,load_workbook
+# from openpyxl.reader.excel import load_workbook
 
 
 def clear(x):
@@ -21,7 +23,7 @@ def clear(x):
 
 
 def clear_notice():
-    df = pd.read_csv('../data/notice.csv')
+    df = pd.read_csv('../dataset/notice.csv')
     df['s_content'] = df['s_content'].apply(lambda x: clear(''.join(eval(x))))
     df.drop_duplicates(subset='s_content', inplace=True)
     content = df['s_content'].tolist()
@@ -88,12 +90,24 @@ def clear_audio():
         [f1.write(i) for i in res]
     print(symbol)
 
+
+def clear_xlsx():
+
+    wb = load_workbook('../dataset/原神语音文本.xlsx')
+    sheets = wb.worksheets  # 获取当前所有的sheet
+    print(sheets)
+
+    with open('../data/mhy-paimeng-clear.txt','w') as f:
+        for sheet in sheets:
+            print(sheet)
+            try:
+                for col in sheet['B']:
+                    if len(str(col.value))>10:
+                        f.write(col.value+'\n')
+            except Exception as e:
+                print(e)
+                continue
+
+
 if __name__ == '__main__':
-    # clear_audio()
-    max_len = 0
-    with open('../data/mhy-audio-clear.txt', 'r') as f1:
-        for line in f1.readlines():
-            max_len = max(max_len,len(line.replace('\n','')))
-            if len(line.replace('\n',''))>256:
-                print(line)
-    print(max_len)
+    clear_xlsx()
