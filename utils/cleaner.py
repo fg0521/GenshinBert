@@ -2,7 +2,7 @@ import re
 import pandas as pd
 from openpyxl import Workbook,load_workbook
 # from openpyxl.reader.excel import load_workbook
-
+import os
 
 def clear(x):
     x = re.sub('」「', '」、「', x)
@@ -92,7 +92,6 @@ def clear_audio():
 
 
 def clear_xlsx():
-
     wb = load_workbook('../dataset/原神语音文本.xlsx')
     sheets = wb.worksheets  # 获取当前所有的sheet
     print(sheets)
@@ -108,13 +107,28 @@ def clear_xlsx():
                 print(e)
                 continue
 
+def clear_story():
+    content = []
+    texts = os.listdir('../dataset/story')
+    for t in texts:
+        with open(os.path.join('../dataset/story',t),'r') as f:
+            res = f.read().split('\n')
+        each_content = ''
+        for i in res:
+            each_content = each_content+i
+            if len(each_content)>80 and len(each_content)<256:
+                each_content = re.sub('『|』|—{4,}|（.*?）','',each_content)
+                each_content = each_content.replace('……','...').replace('“...”','')
+                print(len(each_content))
+                if len(each_content) >30:
+                    content.append(each_content)
+                each_content = ''
+        # print(content)
+        # break
+    with open('../data/hmy-story-clear.txt','w') as f1:
+        [f1.write(i+'\n') for i in content]
+
 
 if __name__ == '__main__':
-    # clear_xlsx()
-    with open('../data/mhy-paimeng-clear.txt', 'r') as f:
-        res = f.read().split('\n')
-    res = set(res)
-
-    with open('../data/mhy-paimeng-clear1.txt', 'w') as f1:
-        for i in list(res):
-            f1.write(i+'\n')
+    clear_story()
+    # print(re.sub('『|』|—{4,}|（.*?）','','『温迪激动的小花都飘了出来：“之后大家会通夜举行终末的宴会，纪念神的恩惠，度过快乐的时光...'))
