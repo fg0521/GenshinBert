@@ -9,8 +9,8 @@ def split_train_dev_data(ratio=0.9):
         total_text.extend(f2.read().split('\n'))
     with open('../data/mhy-notice-clear.txt','r') as f3:
         total_text.extend(f3.read().split('\n'))
-    with open('../data/mhy-paimeng-clear.txt','r') as f4:
-        total_text.extend(f4.read().split('\n'))
+    # with open('../data/mhy-paimeng-clear.txt','r') as f4:
+    #     total_text.extend(f4.read().split('\n'))
     with open('../data/hmy-story-clear.txt','r') as f7:
         total_text.extend(f7.read().split('\n'))
 
