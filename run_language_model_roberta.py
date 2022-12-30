@@ -58,13 +58,13 @@ class ModelArguments:
     """
 
     model_name_or_path: Optional[str] = field(
-        default=None,
+        default='hflroberta',
         metadata={
             "help": "The model checkpoint for weights initialization. Leave None if you want to train a model from scratch."
         },
     )
     model_type: Optional[str] = field(
-        default=None,
+        default='bert',
         metadata={"help": "If training from scratch, pass a model type from the list: " + ", ".join(MODEL_TYPES)},
     )
     config_name: Optional[str] = field(
@@ -85,10 +85,10 @@ class DataTrainingArguments:
     """
 
     train_data_file: Optional[str] = field(
-        default=None, metadata={"help": "The input training data file (a text file)."}
+        default='../dataset/train.txt', metadata={"help": "The input training data file (a text file)."}
     )
     eval_data_file: Optional[str] = field(
-        default=None,
+        default='../dataset/eval.txt',
         metadata={"help": "An optional input evaluation data file to evaluate the perplexity on (a text file)."},
     )
     line_by_line: bool = field(
@@ -97,7 +97,7 @@ class DataTrainingArguments:
     )
 
     mlm: bool = field(
-        default=False, metadata={"help": "Train with masked-language modeling loss instead of language modeling."}
+        default=True, metadata={"help": "Train with masked-language modeling loss instead of language modeling."}
     )
     mlm_probability: float = field(
         default=0.15, metadata={"help": "Ratio of tokens to mask for masked language modeling loss"}
@@ -143,8 +143,11 @@ def main():
     parser = HfArgumentParser((ModelArguments, DataTrainingArguments, TrainingArguments))
     model_args, data_args, training_args = parser.parse_args_into_dataclasses()
 
-    training_args.num_train_epochs = 30 # total # of training epochs 训练总批次
-    training_args.per_device_train_batch_size = 16
+    training_args.logging_steps=5000
+    training_args.save_steps=5000
+    training_args.num_train_epochs = 60  # total # of training epochs 训练总批次
+    training_args.per_device_train_batch_size = 16  # batch size per device during training 训练批大小
+    #training_args.per_device_eval_batch_size = 64,  # batch size for evaluation 评估批大小
     training_args.logging_dir = './logs'
 
     # model_args.config_name =
@@ -297,7 +300,8 @@ def main():
 
 
 def _mp_fn(index):
-    # python run_language_model_roberta.py     --output_dir=output     --model_type=bert     --model_name_or_path=hflroberta     --do_train     --train_data_file=train.txt     --do_eval     --eval_data_file=eval.txt     --mlm --per_device_train_batch_size=4
+    # For xla_spawn (TPUs)
+    # python run_language_model_roberta.py --output_dir = genshin --do_train  --do_eval
     main()
 
 

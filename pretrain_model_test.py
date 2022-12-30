@@ -3,7 +3,6 @@ import torch
 
 
 model_path = 'genshin-bert'
-
 tokenizer = BertTokenizer.from_pretrained(model_path)
 model = BertForMaskedLM.from_pretrained(model_path)
 model_org = BertForMaskedLM.from_pretrained('/Users/maoyufeng/slash/models/chinese-bert-wwm-ext')
