@@ -44,5 +44,5 @@
 
 模型采用从米游社获取而来的数据，大约是2.8w的文本数据，已经经过数据清洗和去重，每条训练语料长度在20-256左右；在2块3090上训练60个epoch，并未完全训练到收敛。
 
-<img src="/Users/maoyufeng/slash/project/GenshinBert/src/3F50B7F8-AAEF-4429-8D11-D8D7AEFA7CBE.png" alt="3F50B7F8-AAEF-4429-8D11-D8D7AEFA7CBE" style="zoom:50%;" />
+<img src="src/3F50B7F8-AAEF-4429-8D11-D8D7AEFA7CBE.png" alt="3F50B7F8-AAEF-4429-8D11-D8D7AEFA7CBE" style="zoom:50%;" />
 
