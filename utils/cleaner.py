@@ -1,3 +1,4 @@
+import json
 import re
 import pandas as pd
 from openpyxl import Workbook,load_workbook
@@ -129,6 +130,24 @@ def clear_story():
         [f1.write(i+'\n') for i in content]
 
 
+def get_audio_text():
+    with open('/Users/maoyufeng/Downloads/GenshinVoice-main/result.json') as f:
+        text = json.load(f)
+    # print(type(text))
+    with open('../data/hmy-audio2-clear.txt','w') as f:
+        for k,v in text.items():
+            if v['language'] == 'CHS' and v.get('text'):
+                f.write(v['text']+'\n')
+
+def clear_audio2():
+    with open('../data/hmy-audio2-clear.txt','r') as f:
+        text = [i for i in f.readlines() if len(re.findall('[\u4e00-\u9fa5]',i)) > 6]
+    text = list(set(text))
+    [print(i) for i in text if len(i)>255]
+    with open('../data/hmy-audio2-clear2.txt','w') as f:
+        [f.write(i) for i in text]
+
+
 if __name__ == '__main__':
-    clear_story()
-    # print(re.sub('『|』|—{4,}|（.*?）','','『温迪激动的小花都飘了出来：“之后大家会通夜举行终末的宴会，纪念神的恩惠，度过快乐的时光...'))
+    # clear_story()
+    clear_audio2()

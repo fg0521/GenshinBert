@@ -6,6 +6,7 @@ import torch
 
 
 if __name__ == '__main__':
+    print(torch.__version__)
     model_path = 'genshin-bert'
     tokenizer = BertTokenizer.from_pretrained(model_path)
     genshin_bert = BertForMaskedLM.from_pretrained(model_path)
