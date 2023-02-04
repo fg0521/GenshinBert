@@ -13,6 +13,8 @@ def split_train_dev_data(ratio=0.9):
         total_text.extend(f4.read().split('\n'))
     with open('../data/hmy-story-clear.txt','r') as f7:
         total_text.extend(f7.read().split('\n'))
+    with open('../data/hmy-audio2-clear2.txt','r') as f8:
+        total_text.extend(f8.read().split('\n'))
 
     total_text = list(set(total_text))
     random.shuffle(total_text)
@@ -26,6 +28,9 @@ def split_train_dev_data(ratio=0.9):
 
     with open('../dataset/eval.txt','w') as f6:
         [f6.write(i+'\n\n') for i in val_text]
+
+
+
 
 
 if __name__ == '__main__':
