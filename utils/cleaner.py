@@ -2,7 +2,7 @@ import json
 import re
 import pandas as pd
 from openpyxl import Workbook,load_workbook
-# from openpyxl.reader.excel import load_workbook
+#from openpyxl.reader.excel import load_workbook
 import os
 
 def clear(x):
@@ -148,6 +148,51 @@ def clear_audio2():
         [f.write(i) for i in text]
 
 
+def clear_post():
+
+    key_list = ['!','@','#','$','%','^','&','*','<','(',')','_','+','{','}',':','"','>',
+    '?','|','~','！','￥','…','（','）','——','「','」','：','《','》',
+    '？','、','。','，','；','】','【','、','"']
+
+    key_dict = {'⑶':'3.', '⑦':'7.','⒊':'3.', '⑼':'9.','㈨':'9.','➀':'1.', '⑽':'10.','⑫':'12.', '⑹':'6.',
+                 '⑰':'17.', '⒈':'1.','㈤':'5.', '①':'1.', '⒉':'2.','⑸':'5.', '⒌':'5.','③':'3.', '⑩':'10.',
+                '㈥':'6.','⑺':'7.', '⑷':'4.', '㈡':'2.', '⑲':'19.', '⑥':'6.', '⑧':'8.','⑵':'2.','⑻':'8.',
+                '⑱':'18.', '⑨':'9.', '⑴':'1.', '㈣':'4.', '⑮':'15.', '⑯':'16.', '➂':'3.', '⒋':'4.', '⑬':'13.',
+                '➃':'4.',  '④':'4.', '⑤':'5.','…':'...'}
+
+
+    def deal(x):
+        try:
+            x = ''.join(eval(str(x))).split('\n')
+            x = [i for i in x if i and re.findall('[a-zA-Z\d\u4e00-\u9fa5]', i)]
+            x = [re.sub('(_\(.*?\))|(UID[:|：]*[\d]+[^\da-zA-Z\u4e00-\u9fa5]*)','',i) for i in x]
+            return x
+        except:
+            return []
+
+    df = pd.read_csv('../dataset/最新发帖2.csv')
+    df = df[['s_content']]
+    df['s_content']= df['s_content'].apply(lambda x:deal(x))
+    data = []
+    for _,row in df.iterrows():
+        len_sent = ''
+        for sentence in row['s_content']:
+            for k,v in key_dict.items():
+                sentence = sentence.replace(k,v)
+            sentence = re.sub('[^\da-zA-Z\u4e00-\u9fa5!@#$%^&*()_+{}\[\]:<>?？《》：；;（）、.。]','',sentence)
+            sentence = re.sub('(_\(.*?\))|(UID[:|：]*[\d]+[^\da-zA-Z\u4e00-\u9fa5]*)','',sentence)
+
+            if len(len_sent)<128:
+                len_sent+=sentence
+            else:
+                data.append(len_sent)
+                len_sent=''
+        # data.extend(re.findall('[^\da-zA-Z\u4e00-\u9fa5]',str(row['s_content'])))
+    # print(list(set(data)))
+    # print(df)
+
+
+
+
 if __name__ == '__main__':
-    # clear_story()
-    clear_audio2()
+    clear_post()
