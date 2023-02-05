@@ -148,6 +148,43 @@ def clear_audio2():
         [f.write(i) for i in text]
 
 
+
+def clear_hot_strategy():
+    rep_dict = {
+        '①':'1.','②':'2.','③':'3.','④':'4.','⑤':'5.','⑥':'6.','⑦':'7.','⑧':'8.','⑨':'9.','⑩':'10.',
+        '…':'...','➕':'+','＞':'>','＋':'+','≈':'=',
+    }
+    symbol = ['～', 'ω', '❶', 'Ⅱ', '｀',  '▲', '❸', '▋',  '②', '️', '◆',  '🔹', '④', '\ufeff',
+     '③', 'Ⅰ', '▼','×',  '●',  '▌',  'ェ', '」', '❷',
+         '。', '→', '\u200b', '•', '★',  '✪', '※',  '☆', 'Ⅲ', '´', '↓', '\xa0', '°', '⭐', '①',  '\t', '⑤', '√','>>']
+
+    df = pd.read_csv('../dataset/hot_strategy.csv')
+    df = df[['s_content']]
+    df['s_content'] = df['s_content'].apply(lambda x:''.join(eval(x)).split('\n'))
+    df['s_content'] = df['s_content'].apply(lambda x:[re.sub(' |_\(.*?\)','',s) for s in x if re.findall('[\u4e00-\u9fa5]+',s)])
+    data = []
+    for _,row in df.iterrows():
+        data.extend(row['s_content'])
+    new_data = []
+    for s in data:
+        for k,v in rep_dict.items():
+            s = s.replace(k,v)
+        for i in symbol:
+            s = s.replace(i,'')
+        if len(re.findall('[\u4e00-\u9fa5]',s))>10:
+            new_data.append(s)
+    # new_data = list(set(new_data))
+    with open('../data/mhy-strategy-clear.txt','w') as f:
+        [f.write(s+'\n') for s in new_data]
+    [print(s) for s in new_data if len(s)>256]
+    # symbol = set(list(''.join(re.findall('[^\da-zA-Z\u4e00-\u9fa5]',''.join(data)))))
+    # print(list(symbol))
+
+
 if __name__ == '__main__':
-    # clear_story()
-    clear_audio2()
+    clear_hot_strategy()
+    # with open('../data/mhy-strategy-clear.txt', 'r') as f:
+    #     res = [i.replace('\n','') for i in f.readlines()]
+    # new_data = list(set(res))
+    # with open('../data/mhy-strategy-clear.txt','w') as f:
+    #     [f.write(s+'\n') for s in new_data]
