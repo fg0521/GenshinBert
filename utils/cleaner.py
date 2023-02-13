@@ -1,3 +1,4 @@
+import argparse
 import json
 import re
 import pandas as pd
@@ -179,7 +180,8 @@ def clear_hot_strategy():
     [print(s) for s in new_data if len(s)>256]
     # symbol = set(list(''.join(re.findall('[^\da-zA-Z\u4e00-\u9fa5]',''.join(data)))))
     # print(list(symbol))
-
+arg = argparse.ArgumentParser()
+arg.add_argument()
 
 if __name__ == '__main__':
     clear_hot_strategy()
